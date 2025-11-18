@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class TPC_DBInterf {
+public abstract interface TPC_DBInterf {
   public abstract void insertPart(Part part) throws IllegalArgumentException, SQLException;
 
   public abstract HashMap<Integer, Part> readAllParts();

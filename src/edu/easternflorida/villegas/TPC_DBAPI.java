@@ -29,7 +29,7 @@ import edu.easternflorida.villegas.interfaces.TPC_DBInterf;
  *
  * @author samuel
  */
-public class TPC_DBAPI extends TPC_DBInterf {
+public class TPC_DBAPI implements TPC_DBInterf {
   private final String DATABASE_URL = "jdbc:derby:JavaDB";
   private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
   private Statement statement;

@@ -11,10 +11,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.easternflorida.tpc.interfaces.Customer;
+import edu.easternflorida.tpc.interfaces.Lineitem;
 import edu.easternflorida.tpc.interfaces.Nation;
+import edu.easternflorida.tpc.interfaces.Orders;
 import edu.easternflorida.tpc.interfaces.Part;
 import edu.easternflorida.tpc.interfaces.PartSupp;
 import edu.easternflorida.tpc.interfaces.Region;
@@ -371,9 +375,277 @@ public class TPC_DBAPI extends TPC_DBInterf {
   }
 
   private boolean checkForDuplicatePartSupp(PartSupp partSupp) {
-    HashMap<Integer, Supplier> partSupps = readAllSuppliers();
+    ArrayList<PartSupp> partSupps = readAllPartSupp();
 
-    return partSupps.containsKey(partSupp.getPS_SUPPKEY());
+    for (PartSupp ps : partSupps) {
+      if (ps.getPS_PARTKEY() == partSupp.getPS_PARTKEY() && ps.getPS_SUPPKEY() == partSupp.getPS_SUPPKEY()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public void insertCustomer(Customer customer) throws IllegalArgumentException, SQLException {
+    boolean isDuplicate = checkForDuplicateCustomer(customer);
+    String insertCustomerQuery = String.format(
+        "INSERT INTO APP.CUSTOMER VALUES (%d, \'%s\', \'%s\', %d, \'%s\', %f, \'%s\', \'%s\')",
+        customer.getC_CUSTKEY(), customer.getC_NAME(),
+        customer.getC_ADDRESS(), customer.getC_NATIONKEY(), customer.getC_PHONE(),
+        customer.getC_ACCTBAL().doubleValue(),
+        customer.getC_MKTSEGMENT(), customer.getC_COMMENT());
+
+    if (!isDuplicate) {
+      statement.execute(insertCustomerQuery);
+    } else {
+      throw new IllegalArgumentException("Customer key already exists!");
+    }
+  }
+
+  @Override
+  public HashMap<Integer, Customer> readAllCustomers() {
+    String readAllCustomers = "SELECT * FROM APP.CUSTOMER";
+    HashMap<Integer, Customer> customers = new HashMap<Integer, Customer>();
+
+    try {
+      ResultSet result = statement.executeQuery(readAllCustomers);
+      ResultSetMetaData meta = result.getMetaData();
+
+      while (result.next()) {
+        int C_CUSTKEY = 0;
+        String C_NAME = "";
+        String C_ADDRESS = "";
+        int C_NATIONKEY = 0;
+        String C_PHONE = "";
+        BigDecimal C_ACCTBAL = BigDecimal.ZERO;
+        String C_MKTSEGMENT = "";
+        String C_COMMENT = "";
+
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
+          if (i == 1) {
+            C_CUSTKEY = (int) result.getObject(i);
+          } else if (i == 2) {
+            C_NAME = (String) result.getObject(i);
+          } else if (i == 3) {
+            C_ADDRESS = (String) result.getObject(i);
+          } else if (i == 4) {
+            C_NATIONKEY = (int) result.getObject(i);
+          } else if (i == 5) {
+            C_PHONE = (String) result.getObject(i);
+          } else if (i == 6) {
+            C_ACCTBAL = (BigDecimal) result.getObject(i);
+          } else if (i == 7) {
+            C_MKTSEGMENT = (String) result.getObject(i);
+          } else if (i == 8) {
+            C_COMMENT = (String) result.getObject(i);
+          }
+        }
+
+        if (C_CUSTKEY != 0) {
+          customers
+              .put(
+                  C_CUSTKEY,
+                  new Customer(C_CUSTKEY, C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT));
+        }
+      }
+    } catch (Exception err) {
+      err.printStackTrace();
+    }
+
+    return customers;
+  }
+
+  private boolean checkForDuplicateCustomer(Customer customer) {
+    HashMap<Integer, Customer> customers = readAllCustomers();
+
+    return customers.containsKey(customer.getC_CUSTKEY());
+  }
+
+  @Override
+  public void insertOrders(Orders orders) throws IllegalArgumentException, SQLException {
+    boolean isDuplicate = checkForDuplicateOrders(orders);
+    String insertOrdersQuery = String.format(
+        "INSERT INTO APP.ORDERS VALUES (%d, %d, \'%s\', %f, \'%s\', \'%s\', \'%s\', %d, \'%s\')",
+        orders.getO_ORDERKEY(), orders.getO_CUSTKEY(),
+        orders.getO_ORDERSTATUS(), orders.getO_TOTALPRICE().doubleValue(),
+        orders.getO_ORDERDATE().toString(), orders.getO_ORDERPRIORITY(), orders.getO_CLERK(),
+        orders.getO_SHIPPRIORITY(), orders.getO_COMMENT());
+
+    if (!isDuplicate) {
+      statement.execute(insertOrdersQuery);
+    } else {
+      throw new IllegalArgumentException("Order key already exists!");
+    }
+  }
+
+  @Override
+  public HashMap<Integer, Orders> readAllOrders() {
+    String readAllOrders = "SELECT * FROM APP.ORDERS";
+    HashMap<Integer, Orders> orders = new HashMap<Integer, Orders>();
+
+    try {
+      ResultSet result = statement.executeQuery(readAllOrders);
+      ResultSetMetaData meta = result.getMetaData();
+
+      while (result.next()) {
+        int O_ORDERKEY = 0;
+        int O_CUSTKEY = 0;
+        String O_ORDERSTATUS = "";
+        BigDecimal O_TOTALPRICE = BigDecimal.ZERO;
+        Date O_ORDERDATE = null;
+        String O_ORDERPRIORITY = "";
+        String O_CLERK = "";
+        int O_SHIPPRIORITY = 0;
+        String O_COMMENT = "";
+
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
+          if (i == 1) {
+            O_ORDERKEY = (int) result.getObject(i);
+          } else if (i == 2) {
+            O_CUSTKEY = (int) result.getObject(i);
+          } else if (i == 3) {
+            O_ORDERSTATUS = (String) result.getObject(i);
+          } else if (i == 4) {
+            O_TOTALPRICE = (BigDecimal) result.getObject(i);
+          } else if (i == 5) {
+            O_ORDERDATE = (Date) result.getObject(i);
+          } else if (i == 6) {
+            O_ORDERPRIORITY = (String) result.getObject(i);
+          } else if (i == 7) {
+            O_CLERK = (String) result.getObject(i);
+          } else if (i == 8) {
+            O_SHIPPRIORITY = (int) result.getObject(i);
+          } else if (i == 9) {
+            O_COMMENT = (String) result.getObject(i);
+          }
+        }
+
+        if (O_ORDERKEY != 0) {
+          orders
+              .put(
+                  O_ORDERKEY,
+                  new Orders(O_ORDERKEY, O_CUSTKEY, O_ORDERSTATUS, O_TOTALPRICE, O_ORDERDATE, O_ORDERPRIORITY, O_CLERK,
+                      O_SHIPPRIORITY, O_COMMENT));
+        }
+      }
+    } catch (Exception err) {
+      err.printStackTrace();
+    }
+
+    return orders;
+  }
+
+  private boolean checkForDuplicateOrders(Orders orders) {
+    HashMap<Integer, Orders> ordersMap = readAllOrders();
+
+    return ordersMap.containsKey(orders.getO_ORDERKEY());
+  }
+
+  @Override
+  public void insertLineitem(Lineitem lineitem) throws IllegalArgumentException, SQLException {
+    boolean isDuplicate = checkForDuplicateLineitem(lineitem);
+    String insertLineitemQuery = String.format(
+        "INSERT INTO APP.LINEITEM VALUES (%d, %d, %d, %d, %f, %f, %f, %f, \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')",
+        lineitem.getL_ORDERKEY(), lineitem.getL_PARTKEY(),
+        lineitem.getL_SUPPKEY(), lineitem.getL_LINENUMBER(), lineitem.getL_QUANTITY().doubleValue(),
+        lineitem.getL_EXTENDEDPRICE().doubleValue(), lineitem.getL_DISCOUNT().doubleValue(),
+        lineitem.getL_TAX().doubleValue(), lineitem.getL_RETURNFLAG(), lineitem.getL_LINESTATUS(),
+        lineitem.getL_SHIPDATE().toString(), lineitem.getL_COMMITDATE().toString(),
+        lineitem.getL_RECEIPTDATE().toString(), lineitem.getL_SHIPINSTRUCT(), lineitem.getL_SHIPMODE(),
+        lineitem.getL_COMMENT());
+
+    if (!isDuplicate) {
+      statement.execute(insertLineitemQuery);
+    } else {
+      throw new IllegalArgumentException("Lineitem key already exists!");
+    }
+  }
+
+  @Override
+  public ArrayList<Lineitem> readAllLineitems() {
+    String readAllLineitems = "SELECT * FROM APP.LINEITEM";
+    ArrayList<Lineitem> lineitems = new ArrayList<Lineitem>();
+
+    try {
+      ResultSet result = statement.executeQuery(readAllLineitems);
+      ResultSetMetaData meta = result.getMetaData();
+
+      while (result.next()) {
+        int L_ORDERKEY = 0;
+        int L_PARTKEY = 0;
+        int L_SUPPKEY = 0;
+        int L_LINENUMBER = 0;
+        BigDecimal L_QUANTITY = BigDecimal.ZERO;
+        BigDecimal L_EXTENDEDPRICE = BigDecimal.ZERO;
+        BigDecimal L_DISCOUNT = BigDecimal.ZERO;
+        BigDecimal L_TAX = BigDecimal.ZERO;
+        String L_RETURNFLAG = "";
+        String L_LINESTATUS = "";
+        Date L_SHIPDATE = null;
+        Date L_COMMITDATE = null;
+        Date L_RECEIPTDATE = null;
+        String L_SHIPINSTRUCT = "";
+        String L_SHIPMODE = "";
+        String L_COMMENT = "";
+
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
+          if (i == 1) {
+            L_ORDERKEY = (int) result.getObject(i);
+          } else if (i == 2) {
+            L_PARTKEY = (int) result.getObject(i);
+          } else if (i == 3) {
+            L_SUPPKEY = (int) result.getObject(i);
+          } else if (i == 4) {
+            L_LINENUMBER = (int) result.getObject(i);
+          } else if (i == 5) {
+            L_QUANTITY = (BigDecimal) result.getObject(i);
+          } else if (i == 6) {
+            L_EXTENDEDPRICE = (BigDecimal) result.getObject(i);
+          } else if (i == 7) {
+            L_DISCOUNT = (BigDecimal) result.getObject(i);
+          } else if (i == 8) {
+            L_TAX = (BigDecimal) result.getObject(i);
+          } else if (i == 9) {
+            L_RETURNFLAG = (String) result.getObject(i);
+          } else if (i == 10) {
+            L_LINESTATUS = (String) result.getObject(i);
+          } else if (i == 11) {
+            L_SHIPDATE = (Date) result.getObject(i);
+          } else if (i == 12) {
+            L_COMMITDATE = (Date) result.getObject(i);
+          } else if (i == 13) {
+            L_RECEIPTDATE = (Date) result.getObject(i);
+          } else if (i == 14) {
+            L_SHIPINSTRUCT = (String) result.getObject(i);
+          } else if (i == 15) {
+            L_SHIPMODE = (String) result.getObject(i);
+          } else if (i == 16) {
+            L_COMMENT = (String) result.getObject(i);
+          }
+        }
+
+        if (L_ORDERKEY != 0) {
+          lineitems.add(new Lineitem(L_ORDERKEY, L_PARTKEY, L_SUPPKEY, L_LINENUMBER, L_QUANTITY, L_EXTENDEDPRICE,
+              L_DISCOUNT, L_TAX, L_RETURNFLAG, L_LINESTATUS, L_SHIPDATE, L_COMMITDATE, L_RECEIPTDATE, L_SHIPINSTRUCT,
+              L_SHIPMODE, L_COMMENT));
+        }
+      }
+    } catch (Exception err) {
+      err.printStackTrace();
+    }
+
+    return lineitems;
+  }
+
+  private boolean checkForDuplicateLineitem(Lineitem lineitem) {
+    ArrayList<Lineitem> lineitems = readAllLineitems();
+
+    for (Lineitem li : lineitems) {
+      if (li.getL_ORDERKEY() == lineitem.getL_ORDERKEY() && li.getL_LINENUMBER() == lineitem.getL_LINENUMBER()) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

@@ -24,4 +24,16 @@ public abstract class TPC_DBInterf {
   public abstract void insertPartSupp(PartSupp partSupp) throws IllegalArgumentException, SQLException;
 
   public abstract ArrayList<PartSupp> readAllPartSupp();
+
+  public abstract void insertCustomer(Customer customer) throws IllegalArgumentException, SQLException;
+
+  public abstract HashMap<Integer, Customer> readAllCustomers();
+
+  public abstract void insertOrders(Orders orders) throws IllegalArgumentException, SQLException;
+
+  public abstract HashMap<Integer, Orders> readAllOrders();
+
+  public abstract void insertLineitem(Lineitem lineitem) throws IllegalArgumentException, SQLException;
+
+  public abstract ArrayList<Lineitem> readAllLineitems();
 }

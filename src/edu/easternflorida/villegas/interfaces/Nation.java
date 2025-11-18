@@ -1,4 +1,4 @@
-package edu.easternflorida.tpc.interfaces;
+package edu.easternflorida.villegas.interfaces;
 
 public class Nation {
   private int N_NATIONKEY;

@@ -1,4 +1,4 @@
-package edu.easternflorida.tpc.interfaces;
+package edu.easternflorida.villegas.interfaces;
 
 import java.math.BigDecimal;
 
@@ -56,4 +56,3 @@ public class Customer {
     return C_COMMENT;
   }
 }
-

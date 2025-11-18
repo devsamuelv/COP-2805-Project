@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.easternflorida.tpc;
+package edu.easternflorida.villegas;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -15,15 +15,15 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import edu.easternflorida.tpc.interfaces.Customer;
-import edu.easternflorida.tpc.interfaces.Lineitem;
-import edu.easternflorida.tpc.interfaces.Nation;
-import edu.easternflorida.tpc.interfaces.Orders;
-import edu.easternflorida.tpc.interfaces.Part;
-import edu.easternflorida.tpc.interfaces.PartSupp;
-import edu.easternflorida.tpc.interfaces.Region;
-import edu.easternflorida.tpc.interfaces.Supplier;
-import edu.easternflorida.tpc.interfaces.TPC_DBInterf;
+import edu.easternflorida.villegas.interfaces.Customer;
+import edu.easternflorida.villegas.interfaces.Lineitem;
+import edu.easternflorida.villegas.interfaces.Nation;
+import edu.easternflorida.villegas.interfaces.Orders;
+import edu.easternflorida.villegas.interfaces.Part;
+import edu.easternflorida.villegas.interfaces.PartSupp;
+import edu.easternflorida.villegas.interfaces.Region;
+import edu.easternflorida.villegas.interfaces.Supplier;
+import edu.easternflorida.villegas.interfaces.TPC_DBInterf;
 
 /**
  *

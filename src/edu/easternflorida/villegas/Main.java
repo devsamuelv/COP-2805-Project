@@ -1,9 +1,9 @@
-package edu.easternflorida.tpc;
+package edu.easternflorida.villegas;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-import edu.easternflorida.tpc.interfaces.Part;
+import edu.easternflorida.villegas.interfaces.Part;
 
 public class Main {
   static TPC_DBAPI api = new TPC_DBAPI();

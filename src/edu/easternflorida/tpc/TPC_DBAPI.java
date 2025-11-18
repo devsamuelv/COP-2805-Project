@@ -11,10 +11,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.easternflorida.tpc.interfaces.Nation;
 import edu.easternflorida.tpc.interfaces.Part;
+import edu.easternflorida.tpc.interfaces.PartSupp;
 import edu.easternflorida.tpc.interfaces.Region;
 import edu.easternflorida.tpc.interfaces.Supplier;
 import edu.easternflorida.tpc.interfaces.TPC_DBInterf;
@@ -310,6 +312,68 @@ public class TPC_DBAPI extends TPC_DBInterf {
     HashMap<Integer, Supplier> suppliers = readAllSuppliers();
 
     return suppliers.containsKey(supplier.getS_SUPPKEY());
+  }
+
+  @Override
+  public void insertPartSupp(PartSupp partSupp) throws IllegalArgumentException, SQLException {
+    boolean isDuplicate = checkForDuplicatePartSupp(partSupp);
+    String insertSupplierQuery = String.format(
+        "INSERT INTO APP.PARTSUPP VALUES (%d, %d, %d, %f, \'%s\')",
+        partSupp.getPS_PARTKEY(), partSupp.getPS_SUPPKEY(),
+        partSupp.getPS_AVAILQTY(), partSupp.getPS_SUPPLYCOST(), partSupp.getPS_COMMENT());
+
+    if (!isDuplicate) {
+      statement.execute(insertSupplierQuery);
+    } else {
+      throw new IllegalArgumentException("Supplier key already exists!");
+    }
+  }
+
+  @Override
+  public ArrayList<PartSupp> readAllPartSupp() {
+    String readAllParts = "SELECT * FROM APP.PARTSUPP";
+    ArrayList<PartSupp> suppliers = new ArrayList<PartSupp>();
+
+    try {
+      ResultSet result = statement.executeQuery(readAllParts);
+      ResultSetMetaData meta = result.getMetaData();
+
+      while (result.next()) {
+        int PS_PARTKEY = 0;
+        int PS_SUPPKEY = 0;
+        int PS_AVAILQTY = 0;
+        BigDecimal PS_SUPPLYCOST = BigDecimal.ZERO;
+        String PS_COMMENT = "";
+
+        for (int i = 1; i < meta.getColumnCount(); i++) {
+          if (i == 1) {
+            PS_PARTKEY = (int) result.getObject(i);
+          } else if (i == 2) {
+            PS_SUPPKEY = (int) result.getObject(i);
+          } else if (i == 3) {
+            PS_AVAILQTY = (int) result.getObject(i);
+          } else if (i == 4) {
+            PS_SUPPLYCOST = (BigDecimal) result.getObject(i);
+          } else if (i == 5) {
+            PS_COMMENT = (String) result.getObject(i);
+          }
+        }
+
+        if (PS_PARTKEY != 0) {
+          suppliers.add(new PartSupp(PS_PARTKEY, PS_SUPPKEY, PS_AVAILQTY, PS_SUPPLYCOST, PS_COMMENT));
+        }
+      }
+    } catch (Exception err) {
+      err.printStackTrace();
+    }
+
+    return suppliers;
+  }
+
+  private boolean checkForDuplicatePartSupp(PartSupp partSupp) {
+    HashMap<Integer, Supplier> partSupps = readAllSuppliers();
+
+    return partSupps.containsKey(partSupp.getPS_SUPPKEY());
   }
 
 }

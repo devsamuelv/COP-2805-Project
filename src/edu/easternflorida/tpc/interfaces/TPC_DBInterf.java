@@ -20,4 +20,8 @@ public abstract class TPC_DBInterf {
   public abstract void insertSupplier(Supplier supplier) throws IllegalArgumentException, SQLException;
 
   public abstract HashMap<Integer, Supplier> readAllSuppliers();
+
+  public abstract void insertPartSupp(PartSupp partSupp) throws IllegalArgumentException, SQLException;
+
+  public abstract ArrayList<PartSupp> readAllPartSupp();
 }

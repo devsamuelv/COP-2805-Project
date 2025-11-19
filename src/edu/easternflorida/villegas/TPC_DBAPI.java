@@ -85,7 +85,7 @@ public class TPC_DBAPI implements TPC_DBInterf {
         BigDecimal P_RETAILPRICE = BigDecimal.ZERO;
         String P_COMMENT = "";
 
-        for (int i = 1; i < meta.getColumnCount(); i++) {
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
           if (i == 1) {
             P_PARTKEY = (int) result.getObject(i);
           } else if (i == 2) {
@@ -155,7 +155,7 @@ public class TPC_DBAPI implements TPC_DBInterf {
         String R_NAME = "";
         String R_COMMENT = "";
 
-        for (int i = 1; i < meta.getColumnCount(); i++) {
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
           if (i == 1) {
             R_REGIONKEY = (int) result.getObject(i);
           } else if (i == 2) {
@@ -214,7 +214,7 @@ public class TPC_DBAPI implements TPC_DBInterf {
         int N_REGIONKEY = 0;
         String N_COMMENT = "";
 
-        for (int i = 1; i < meta.getColumnCount(); i++) {
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
           if (i == 1) {
             N_NATIONKEY = (int) result.getObject(i);
           } else if (i == 2) {
@@ -280,7 +280,7 @@ public class TPC_DBAPI implements TPC_DBInterf {
         BigDecimal S_ACCTBAL = BigDecimal.ZERO;
         String S_COMMENT = "";
 
-        for (int i = 1; i < meta.getColumnCount(); i++) {
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
           if (i == 1) {
             S_SUPPKEY = (int) result.getObject(i);
           } else if (i == 2) {
@@ -349,7 +349,7 @@ public class TPC_DBAPI implements TPC_DBInterf {
         BigDecimal PS_SUPPLYCOST = BigDecimal.ZERO;
         String PS_COMMENT = "";
 
-        for (int i = 1; i < meta.getColumnCount(); i++) {
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
           if (i == 1) {
             PS_PARTKEY = (int) result.getObject(i);
           } else if (i == 2) {

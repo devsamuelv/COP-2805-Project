@@ -1,4 +1,4 @@
-package edu.easternflorida.villegas;
+package edu.easternflorida.revard;
 
 import java.sql.Connection;
 
@@ -7,5 +7,5 @@ import java.sql.Connection;
  * TPC_DBAPI will extend this and implement the connect method.
  */
 public abstract class TPC_DBBase {
-    public abstract Connection connect();
+  public abstract Connection connect();
 }

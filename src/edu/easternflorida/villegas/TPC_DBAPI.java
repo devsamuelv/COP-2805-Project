@@ -29,7 +29,7 @@ import edu.easternflorida.villegas.interfaces.TPC_DBInterf;
  *
  * @author samuel
  */
-public class TPC_DBAPI implements TPC_DBInterf {
+public class TPC_DBAPI extends TPC_DBBase implements TPC_DBInterf {
   private final String DATABASE_URL = "jdbc:derby:JavaDB";
   private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
   private Statement statement;
@@ -49,6 +49,26 @@ public class TPC_DBAPI implements TPC_DBInterf {
     }
   }
 
+  private Connection connection;
+
+@Override
+public Connection connect() {
+    try {
+        Class.forName(driver).newInstance();
+        connection = DriverManager.getConnection(DATABASE_URL);
+        statement = connection.createStatement();
+        System.out.println("Connected to JavaDB.");
+    } catch (Exception e) {
+        System.err.println("Connection failed: " + e.getMessage());
+        connection = null;
+    }
+    return connection;
+}
+
+public Connection getConnection() {
+    return connection;
+}
+  
   @Override
   public void insertPart(Part part) throws IllegalArgumentException, SQLException {
     boolean isDuplicate = checkForDuplicatePart(part);

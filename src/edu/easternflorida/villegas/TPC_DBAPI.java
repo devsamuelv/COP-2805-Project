@@ -29,24 +29,32 @@ import edu.easternflorida.villegas.interfaces.TPC_DBInterf;
  *
  * @author samuel
  */
-public class TPC_DBAPI implements TPC_DBInterf {
+public class TPC_DBAPI extends TPC_DBBase implements TPC_DBInterf {
   private final String DATABASE_URL = "jdbc:derby:JavaDB";
   private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
   private Statement statement;
+  private Connection connection;
 
-  public TPC_DBAPI() {
+public TPC_DBAPI() {
+    connect();
+  }
+
+  @Override
+  public Connection connect() {
     try {
       Class.forName(driver).newInstance();
-    } catch (Exception err) {
-      err.printStackTrace();
-    }
-
-    try {
-      Connection connection = DriverManager.getConnection(DATABASE_URL);
+      connection = DriverManager.getConnection(DATABASE_URL);
       statement = connection.createStatement();
-    } catch (SQLException err) {
-      err.printStackTrace();
+      System.out.println("Connected to JavaDB.");
+    } catch (Exception e) {
+      System.err.println("Connection failed: " + e.getMessage());
+      connection = null;
     }
+    return connection;
+  }
+
+  public Connection getConnection() {
+    return connection;
   }
 
   @Override

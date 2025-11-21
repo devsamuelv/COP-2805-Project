@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.easternflorida.revard.TPC_DBBase;
 import edu.easternflorida.villegas.interfaces.Customer;
 import edu.easternflorida.villegas.interfaces.Lineitem;
 import edu.easternflorida.villegas.interfaces.Nation;
@@ -35,7 +36,7 @@ public class TPC_DBAPI extends TPC_DBBase implements TPC_DBInterf {
   private Statement statement;
   private Connection connection;
 
-public TPC_DBAPI() {
+  public TPC_DBAPI() {
     connect();
   }
 

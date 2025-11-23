@@ -2,3 +2,10 @@ nbproject/private/*
 raw_tables/*
 JavaDB/*
 JavaDB.zip
+/bin/
+
+/* Eclipse-specific files */
+.project
+.classpath
+.settings/
+.DS_Store

@@ -19,7 +19,7 @@ import edu.easternflorida.revard.TPC_DBBase;
 import edu.easternflorida.villegas.interfaces.Customer;
 import edu.easternflorida.villegas.interfaces.Lineitem;
 import edu.easternflorida.villegas.interfaces.Nation;
-import edu.easternflorida.villegas.interfaces.Orders;
+import edu.easternflorida.villegas.interfaces.Order;
 import edu.easternflorida.villegas.interfaces.Part;
 import edu.easternflorida.villegas.interfaces.PartSupp;
 import edu.easternflorida.villegas.interfaces.Region;
@@ -471,7 +471,7 @@ public class TPC_DBAPI extends TPC_DBBase implements TPC_DBInterf {
   }
 
   @Override
-  public void insertOrders(Orders orders) throws IllegalArgumentException, SQLException {
+  public void insertOrders(Order orders) throws IllegalArgumentException, SQLException {
     boolean isDuplicate = checkForDuplicateOrders(orders);
     String insertOrdersQuery = String.format(
         "INSERT INTO APP.ORDERS VALUES (%d, %d, \'%s\', %f, \'%s\', \'%s\', \'%s\', %d, \'%s\')",
@@ -488,9 +488,9 @@ public class TPC_DBAPI extends TPC_DBBase implements TPC_DBInterf {
   }
 
   @Override
-  public HashMap<Integer, Orders> readAllOrders() {
+  public HashMap<Integer, Order> readAllOrders() {
     String readAllOrders = "SELECT * FROM APP.ORDERS";
-    HashMap<Integer, Orders> orders = new HashMap<Integer, Orders>();
+    HashMap<Integer, Order> orders = new HashMap<Integer, Order>();
 
     try {
       ResultSet result = statement.executeQuery(readAllOrders);
@@ -531,9 +531,8 @@ public class TPC_DBAPI extends TPC_DBBase implements TPC_DBInterf {
 
         if (O_ORDERKEY != 0) {
           orders
-              .put(
-                  O_ORDERKEY,
-                  new Orders(O_ORDERKEY, O_CUSTKEY, O_ORDERSTATUS, O_TOTALPRICE, O_ORDERDATE, O_ORDERPRIORITY, O_CLERK,
+              .put(O_ORDERKEY,
+                  new Order(O_ORDERKEY, O_CUSTKEY, O_ORDERSTATUS, O_TOTALPRICE, O_ORDERDATE, O_ORDERPRIORITY, O_CLERK,
                       O_SHIPPRIORITY, O_COMMENT));
         }
       }
@@ -544,8 +543,8 @@ public class TPC_DBAPI extends TPC_DBBase implements TPC_DBInterf {
     return orders;
   }
 
-  private boolean checkForDuplicateOrders(Orders orders) {
-    HashMap<Integer, Orders> ordersMap = readAllOrders();
+  private boolean checkForDuplicateOrders(Order orders) {
+    HashMap<Integer, Order> ordersMap = readAllOrders();
 
     return ordersMap.containsKey(orders.getO_ORDERKEY());
   }

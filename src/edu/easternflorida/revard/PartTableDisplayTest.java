@@ -1,7 +1,7 @@
 package edu.easternflorida.revard;
 
+import static edu.easternflorida.revard.MainLauncher.TPC_API;
 import edu.easternflorida.villegas.interfaces.Part;
-import edu.easternflorida.villegas.TPC_DBAPI;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,13 +12,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
-
 public class PartTableDisplayTest extends Application {
 
   private TableView<Part> tableOfParts = new TableView<>();
   private ObservableList<Part> partList = FXCollections.observableArrayList();
-  private TPC_DBAPI dbapi = new TPC_DBAPI();
 
   @Override
   public void start(Stage stage) {
@@ -69,7 +66,6 @@ public class PartTableDisplayTest extends Application {
 
   private void loadParts() {
     partList.clear();
-    HashMap<Integer, Part> parts = dbapi.readAllParts();
-    partList.addAll(parts.values());
+    partList.addAll(TPC_API.readAllParts().values());
   }
 }

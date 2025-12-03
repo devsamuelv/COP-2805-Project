@@ -1,5 +1,6 @@
 package edu.easternflorida.martinezi;
 
+import static edu.easternflorida.revard.MainLauncher.TPC_API;
 import edu.easternflorida.villegas.TPC_DBAPI;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -97,7 +98,7 @@ public class App extends Application {
     private void addCustomer(int id, String name, String phone) {
         String sql = "INSERT INTO Customer (c_custkey, c_name, c_address, c_nationkey, c_phone, c_acctbal, c_mktsegment, c_comment) VALUES (?, ?, '', 0, ?, 0.0, '', '')";
 
-        try (Connection conn = DBUtil.getConnection();
+        try (Connection conn = TPC_API.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);

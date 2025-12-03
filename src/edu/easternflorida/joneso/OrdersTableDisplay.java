@@ -1,5 +1,6 @@
 package edu.easternflorida.joneso;
 
+import static edu.easternflorida.revard.MainLauncher.TPC_API;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.*;
+import java.util.Collection;
 
 public class OrdersTableDisplay extends Application {
 
@@ -38,27 +40,17 @@ public class OrdersTableDisplay extends Application {
 
         ObservableList<Order> list = FXCollections.observableArrayList();
 
-        try (Connection conn = DriverManager.getConnection(
-                "jdbc:derby://localhost:1527/tpchdb;user=app;password=app");
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM ORDERS")) {
-
-            while (rs.next()) {
-                list.add(new Order(
-                        rs.getInt("O_ORDERKEY"),
-                        rs.getInt("O_CUSTKEY"),
-                        rs.getString("O_ORDERSTATUS"),
-                        rs.getDouble("O_TOTALPRICE"),
-                        rs.getDate("O_ORDERDATE").toString()
+        Collection<edu.easternflorida.villegas.interfaces.Order> orders = TPC_API.readAllOrders().values();
+        orders.forEach((o) -> {
+            list.add(new Order(
+                        o.getO_ORDERKEY(),
+                        o.getO_CUSTKEY(),
+                        o.getO_ORDERSTATUS(),
+                        o.getO_TOTALPRICE().doubleValue(),
+                        o.getO_ORDERDATE().toString()
                 ));
-            }
-
-            System.out.println("Loaded " + list.size() + " Orders.");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        });
+        
         table.setItems(list);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -70,5 +62,5 @@ public class OrdersTableDisplay extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) { launch(args); }
+//    public static void main(String[] args) { launch(args); }
 }

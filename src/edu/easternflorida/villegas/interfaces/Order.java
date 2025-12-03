@@ -3,7 +3,7 @@ package edu.easternflorida.villegas.interfaces;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-public class Orders {
+public class Order {
   private int O_ORDERKEY;
   private int O_CUSTKEY;
   private String O_ORDERSTATUS;
@@ -14,7 +14,7 @@ public class Orders {
   private int O_SHIPPRIORITY;
   private String O_COMMENT;
 
-  public Orders(int orderKey, int custKey, String orderStatus, BigDecimal totalPrice, Date orderDate,
+  public Order(int orderKey, int custKey, String orderStatus, BigDecimal totalPrice, Date orderDate,
       String orderPriority, String clerk, int shipPriority, String comment) {
     this.O_ORDERKEY = orderKey;
     this.O_CUSTKEY = custKey;

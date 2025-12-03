@@ -29,9 +29,9 @@ public abstract interface TPC_DBInterf {
 
   public abstract HashMap<Integer, Customer> readAllCustomers();
 
-  public abstract void insertOrders(Orders orders) throws IllegalArgumentException, SQLException;
+  public abstract void insertOrders(Order orders) throws IllegalArgumentException, SQLException;
 
-  public abstract HashMap<Integer, Orders> readAllOrders();
+  public abstract HashMap<Integer, Order> readAllOrders();
 
   public abstract void insertLineitem(Lineitem lineitem) throws IllegalArgumentException, SQLException;
 

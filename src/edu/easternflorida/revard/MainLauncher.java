@@ -1,6 +1,8 @@
 package edu.easternflorida.revard;
 
+import edu.easternflorida.joneso.MainMenuTeamC;
 import edu.easternflorida.teamb.TPCHViewerB;
+import edu.easternflorida.villegas.TPC_DBAPI;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,6 +12,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class MainLauncher extends Application {
+    public static TPC_DBAPI TPC_API = new TPC_DBAPI();
+
 
     public static void main(String[] args) {
         launch(args);
@@ -19,26 +23,26 @@ public class MainLauncher extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Main Screen");
 
-        Button openPartsBtn = new Button("Open Part Table");        
-        Button openOtherBtn = new Button("Open Other Table");
+        Button openTeamBBtn = new Button("Open Team B GUI");        
+        Button openTeamCBtn = new Button("Open Team C GUI");
 
-        openPartsBtn.setOnAction(e -> {
-            try {
-                new PartTableDisplayTest().start(new Stage());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-        
-        openOtherBtn.setOnAction(e -> {
+        openTeamBBtn.setOnAction(e -> {
             try {
                 new TPCHViewerB().start(new Stage());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
+        
+        openTeamCBtn.setOnAction(e -> {
+            try {
+                new MainMenuTeamC().start(new Stage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
-        FlowPane layout = new FlowPane(openPartsBtn, openOtherBtn);
+        FlowPane layout = new FlowPane(openTeamBBtn, openTeamCBtn);
         layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout, 300, 200);
         primaryStage.setScene(scene);

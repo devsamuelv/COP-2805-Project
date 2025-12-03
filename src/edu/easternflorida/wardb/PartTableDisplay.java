@@ -1,5 +1,6 @@
 package edu.easternflorida.wardb;
 
+import static edu.easternflorida.revard.MainLauncher.TPC_API;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,11 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.Collection;
 
 public class PartTableDisplay extends Application {
 
@@ -65,31 +62,19 @@ public class PartTableDisplay extends Application {
 
         // Load data from Derby
         ObservableList<Part> parts = FXCollections.observableArrayList();
-
-        try (Connection conn = DriverManager.getConnection(
-                "jdbc:derby://localhost:1527/tpchdb;user=app;password=app");
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM PART")) {
-
-            while (rs.next()) {
-                parts.add(new Part(
-                        rs.getInt("P_PARTKEY"),
-                        rs.getString("P_NAME"),
-                        rs.getString("P_MFGR"),
-                        rs.getString("P_BRAND"),
-                        rs.getString("P_TYPE"),
-                        rs.getInt("P_SIZE"),
-                        rs.getString("P_CONTAINER"),
-                        rs.getDouble("P_RETAILPRICE"),
-                        rs.getString("P_COMMENT")
-                ));
-            }
-
+        
+        try {
+            System.out.println("Loading parts...");
+            
+            Collection<edu.easternflorida.villegas.interfaces.Part> dbParts = TPC_API.readAllParts().values();
+            dbParts.forEach((part) -> {
+                parts.add(new Part(part.getP_PARTKEY(), part.getP_NAME(), part.getP_MFGR(), part.getP_BRAND(), part.getP_TYPE(), part.getP_SIZE(), part.getP_CONTAINER(), part.getP_RETAILPRICE().doubleValue(), part.getP_COMMENT()));
+            });
+            
             System.out.println("✅ Loaded " + parts.size() + " parts from database.");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception err) {
             System.out.println("⚠️ Failed to load parts from the database.");
+            err.printStackTrace();
         }
 
         // Attach data to the table
@@ -104,7 +89,7 @@ public class PartTableDisplay extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
 }

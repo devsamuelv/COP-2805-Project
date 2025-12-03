@@ -72,6 +72,6 @@
     -->
   <classpath>
     <pathelement path="${classpath}" />
-    <pathelement location="lib/derby.jar" />
+    <pathelement id="" location="lib/derby.jar" />
   </classpath>
 </project>

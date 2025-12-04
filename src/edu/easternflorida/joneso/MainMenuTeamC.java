@@ -34,8 +34,4 @@ public class MainMenuTeamC extends Application {
     primaryStage.setScene(new Scene(layout, 400, 300));
     primaryStage.show();
   }
-
-//  public static void main(String[] args) {
-//    launch(args);
-//  }
 }

@@ -1,7 +1,6 @@
 package edu.easternflorida.martinezi;
 
 import static edu.easternflorida.revard.MainLauncher.TPC_API;
-import edu.easternflorida.villegas.TPC_DBAPI;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,18 +8,12 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.sql.*;
 import java.util.Collection;
-import java.util.List;
 import javafx.collections.*;
 
 public class App extends Application {
 
     private TableView<Customer> table = new TableView<>();
     private ObservableList<Customer> data = FXCollections.observableArrayList();
-    private TPC_DBAPI dbapi = new TPC_DBAPI();
-    
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -50,7 +43,7 @@ public class App extends Application {
     }
 
     private void loadCustomers() {
-        Collection<edu.easternflorida.villegas.interfaces.Customer> customers = dbapi.readAllCustomers().values();
+        Collection<edu.easternflorida.villegas.interfaces.Customer> customers = TPC_API.readAllCustomers().values();
         
         customers.forEach((c) -> {
             data.add(new Customer(c.getC_CUSTKEY(), c.getC_NAME(), c.getC_PHONE()));

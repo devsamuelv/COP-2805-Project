@@ -74,4 +74,13 @@
     <pathelement path="${classpath}" />
     <pathelement id="" location="lib/derby.jar" />
   </classpath>
+
+  <jar destfile="build/main/checksites.jar">
+    <fileset dir="build/main/classes" />
+    <zipfileset includes="**/*.class" src="lib/derby.jar" />
+    <manifest>
+      <attribute name="Main-Class"
+        value="edu.easternflorida.villegas.Main" />
+    </manifest>
+  </jar>
 </project>

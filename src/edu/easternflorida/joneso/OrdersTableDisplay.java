@@ -11,7 +11,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.*;
 import java.util.Collection;
 
 public class OrdersTableDisplay extends Application {
@@ -61,6 +60,4 @@ public class OrdersTableDisplay extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
-//    public static void main(String[] args) { launch(args); }
 }

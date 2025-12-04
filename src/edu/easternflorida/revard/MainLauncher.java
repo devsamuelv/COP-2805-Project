@@ -8,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class MainLauncher extends Application {
@@ -21,7 +20,7 @@ public class MainLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Main Screen");
+        primaryStage.setTitle("TPC Screen Chooser");
 
         Button openTeamBBtn = new Button("Open Team B GUI");        
         Button openTeamCBtn = new Button("Open Team C GUI");

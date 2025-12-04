@@ -5,12 +5,6 @@ package edu.easternflorida.martinezi;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
- * @author 55isa
- */
-
-
 import javafx.beans.property.*;
 
 public class Customer {

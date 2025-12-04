@@ -25,10 +25,6 @@ public class TPCHViewerB extends Application {
 
   private TableView<Region> regionTable = new TableView<>();
 
-  public static void main(String[] args) {
-    launch(args);
-  }
-
   @Override
   public void start(Stage primaryStage) {
 
